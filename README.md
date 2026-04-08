@@ -1,58 +1,165 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ⚡ Personal Finance API (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+REST API untuk aplikasi manajemen keuangan pribadi yang dibangun menggunakan **Laravel**.  
+API ini menangani data seperti transaksi, budget, dan tabungan (pots).
 
-## About Laravel
+Backend ini dirancang ringan untuk development lokal menggunakan **SQLite**, serta dapat di-deploy ke production menggunakan **MySQL**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Live API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Base URL:
+https://personal-financeapp.up.railway.app/api
 
-## Learning Laravel
+Contoh endpoint:
+GET /overview
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧰 Teknologi yang Digunakan
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Laravel
+- PHP 8.2+
+- SQLite (Development)
+- MySQL (Production - Railway)
+- REST API (JSON)
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## ⚙️ Cara Menjalankan di Lokal
+
+Ikuti langkah berikut untuk menjalankan project di lokal:
+
+### 1. Persiapan
+- PHP 8.2+ (disarankan pakai Laragon)
+- Composer
+- SQLite extension aktif di `php.ini`
+
+---
+
+### 2. Install Dependency
+```bash
+composer install
+````
+
+---
+
+### 3. Setup Environment
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+### 4. Setup Database (SQLite)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# buat file database
+touch database/database.sqlite
 
-## Code of Conduct
+# jalankan migration + seeder
+php artisan migrate --seed
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### 5. Jalankan Server
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan serve
+```
 
-## License
+Akses API di:
+[http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🗄️ Konfigurasi Database
+
+Project ini menggunakan:
+
+* SQLite → untuk development lokal (ringan & hemat RAM)
+* MySQL → untuk production di Railway
+
+---
+
+## 📡 Dokumentasi API
+
+Semua response menggunakan format **JSON**
+
+| Method | Endpoint               | Deskripsi             |
+| ------ | ---------------------- | --------------------- |
+| GET    | /api/overview          | Ringkasan keuangan    |
+| GET    | /api/transactions      | Daftar transaksi      |
+| GET    | /api/pots              | Daftar tabungan       |
+| POST   | /api/pots              | Tambah tabungan       |
+| PATCH  | /api/pots/{id}/balance | Update saldo tabungan |
+| DELETE | /api/pots/{id}         | Hapus tabungan        |
+| GET    | /api/recurring-bills   | Daftar tagihan rutin  |
+
+---
+
+### Contoh Request
+
+```bash
+GET /api/transactions?search=dining&sort=latest
+```
+
+---
+
+## 🧪 Contoh Response
+
+```json
+{
+  "status": "success",
+  "data": {
+    "balance": {
+      "current": 32.7,
+      "income": 195.5,
+      "expenses": 162.8
+    }
+  }
+}
+```
+
+---
+
+## ⚙️ Fitur Utama
+
+* ✅ REST API dengan struktur yang rapi
+* ✅ Menggunakan Eloquent ORM
+* ✅ Validasi dan keamanan (Mass Assignment Protection)
+* ✅ Relasi antar model (Budget & Transactions)
+* ✅ CORS aktif (siap untuk Flutter)
+
+---
+
+## 🧪 Testing API
+
+Gunakan tools seperti:
+
+* Postman
+* Insomnia
+* Browser
+
+Contoh:
+[http://127.0.0.1:8000/api/overview](http://127.0.0.1:8000/api/overview)
+
+---
+
+## 📌 Catatan
+
+* Project ini hanya backend API (tanpa frontend)
+* Data awal diisi menggunakan seeder
+* Digunakan untuk integrasi dengan aplikasi Flutter
+
+---
+
+## 👨‍💻 Author
+
+Dibuat untuk pembelajaran dan pengembangan aplikasi fullstack (Laravel + Flutter)
+
+```
